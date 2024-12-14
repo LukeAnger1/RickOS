@@ -24,7 +24,7 @@ Tic-Tac-Toe a simple tic-tac-toe DOS game with boxes, Pong-Game using graphics
 
 
 ```
-$ sudo apt-get install make nasm gcc grub-pc-bin mtools xorriso qemu qemu-system virtualbox
+sudo apt-get install make nasm gcc grub-pc-bin mtools xorriso qemu-system virtualbox
 ```
 
 
