@@ -2,3 +2,5 @@
 
 ### Command to run the bin code
 qemu-system-x86_64 x86calc.bin
+
+### To run the iso file see the README.md in the same folder
