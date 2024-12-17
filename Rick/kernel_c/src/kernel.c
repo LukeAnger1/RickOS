@@ -11,6 +11,7 @@ uint8 g_fore_color = WHITE, g_back_color = BLACK;
 // change CALC_SLEEP following to greater than 4
 // for qemu it is better for 1
 #define CALC_SLEEP 1
+#define TERMINAL_SLEEP 1
 
 /*
 this is same as we did in our assembly code for vga_print_char
@@ -198,6 +199,42 @@ int read_int()
   }while(ch > 0);
 
   return atoi(data);
+}
+
+char* read_char()
+{
+  char ch = 0;
+  char keycode = 0;
+  // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
+  // char data[32];
+  char data[32];// = malloc(25 * sizeof(char));
+
+  // Check if there is an allocation failure? IDK
+  if (data == NULL) {
+    return NULL;
+  }
+
+  int index = 0;
+
+  do {
+    keycode = get_input_keycode();
+    if (keycode == KEY_ENTER) {
+      // Run the command
+      data[index] = '\0';
+      print_new_line();
+      break;      
+    } else {
+      // Add more to the string
+      // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
+      ch = get_ascii_char(keycode);
+      print_char(ch);
+      data[index] = ch;
+      index++;
+    }
+    sleep(TERMINAL_SLEEP);
+  } while(ch > 0);
+
+  return data;
 }
 
 char getchar()
