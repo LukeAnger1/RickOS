@@ -6,8 +6,8 @@ rm *.o
 # remove isodir
 rm -r isodir
 
-# remove VGA_Bitmap_Text_OS.bin
-rm VGA_Bitmap_Text_OS.bin
+# remove RICK_OS.bin
+rm RICK_OS.bin
 
-# remove VGA_Bitmap_Text_OS.iso
-rm VGA_Bitmap_Text_OS.iso
+# remove RICK_OS.iso
+rm RICK_OS.iso
