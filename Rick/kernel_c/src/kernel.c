@@ -284,6 +284,7 @@ void calculator()
     print_string("Type in a test str here: ");
     // char *test = read_char();
     // print_string(test);
+    sleep(TERMINAL_SLEEP);
     int test = read_int();
     print_int(test);
     // TEST CODE: Remove later
