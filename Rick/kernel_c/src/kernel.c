@@ -228,7 +228,7 @@ char* read_char()
       // Add more to the string
       // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
       ch = get_ascii_char(keycode);
-      print_char(ch*2);
+      print_char(ch);
       data[index] = ch;
       index++;
     }
@@ -282,11 +282,12 @@ void calculator()
     choice = read_int();
     // TEST CODE: Remove later
     print_string("Type in a test str here: ");
-    // char *test = read_char();
-    // print_string(test);
     sleep(TERMINAL_SLEEP);
-    int test = read_int();
-    print_int(test);
+    char *test = read_char();
+    print_string(test);
+    // sleep(TERMINAL_SLEEP);
+    // int test = read_int();
+    // print_int(test);
     // TEST CODE: Remove later
 
     switch(choice){
