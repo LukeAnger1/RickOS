@@ -300,7 +300,7 @@ void calculator()
 
 void kernel_entry()
 {
-  init_vga(WHITE, BLACK);
+  init_vga(GREEN, BLACK);
   calculator();
 }
 
