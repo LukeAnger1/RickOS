@@ -6,8 +6,8 @@ rm *.o
 # remove isodir
 rm -r isodir
 
-# remove x86_calculator.bin
-rm x86_calculator.bin
+# remove RICK.bin
+rm RICK.bin
 
-# remove x86_calculator.iso
-rm x86_calculator.iso
+# remove RICK.iso
+rm RICK.iso

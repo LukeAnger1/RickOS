@@ -10,17 +10,17 @@ gcc -m32 -c utils.c -o utils.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
 
 gcc -m32 -c char.c -o char.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
 
-# linking all the object files to x86_calculator.bin
-ld -m elf_i386 -T linker.ld kernel.o utils.o char.o boot.o -o x86_calculator.bin -nostdlib
+# linking all the object files to RICK.bin
+ld -m elf_i386 -T linker.ld kernel.o utils.o char.o boot.o -o RICK.bin -nostdlib
 
 # check MyOS.bin file is x86 multiboot file or not
-grub-file --is-x86-multiboot x86_calculator.bin
+grub-file --is-x86-multiboot RICK.bin
 
 # building the iso file
 mkdir -p isodir/boot/grub
-cp x86_calculator.bin isodir/boot/x86_calculator.bin
+cp RICK.bin isodir/boot/RICK.bin
 cp grub.cfg isodir/boot/grub/grub.cfg
-grub-mkrescue -o x86_calculator.iso isodir
+grub-mkrescue -o RICK.iso isodir
 
 # run it in qemu
-qemu-system-x86_64 -cdrom x86_calculator.iso
+qemu-system-x86_64 -cdrom RICK.iso
