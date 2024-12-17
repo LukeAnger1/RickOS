@@ -207,12 +207,13 @@ char* read_char()
   char keycode = 0;
   // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
   // char data[32];
+  // IMPORTANT TODO: This saves it in memory and needs to be derefernced and deleted or maybe can use malloc if can figure out imports
   char data[32];// = malloc(25 * sizeof(char));
 
-  // Check if there is an allocation failure? IDK
-  if (data == NULL) {
-    return NULL;
-  }
+  // Check if there is an allocation failure? IDK, make sure to include with malloc
+  // if (data == NULL) {
+  //   return NULL;
+  // }
 
   int index = 0;
 
@@ -227,7 +228,7 @@ char* read_char()
       // Add more to the string
       // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
       ch = get_ascii_char(keycode);
-      print_char(ch);
+      print_char(ch*2);
       data[index] = ch;
       index++;
     }
@@ -279,6 +280,14 @@ void calculator()
     display_menu();
     print_string("\n\nEnter your choice : ");
     choice = read_int();
+    // TEST CODE: Remove later
+    print_string("Type in a test str here: ");
+    // char *test = read_char();
+    // print_string(test);
+    int test = read_int();
+    print_int(test);
+    // TEST CODE: Remove later
+
     switch(choice){
       case 1:
         read_two_numbers(&num1, &num2);
