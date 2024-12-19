@@ -51,7 +51,8 @@ void clear_vga_buffer(uint16 **buffer, uint8 fore_color, uint8 back_color)
 {
   uint32 i;
   for(i = 0; i < BUFSIZE; i++){
-    (*buffer)[i] = vga_entry(NULL, fore_color, back_color);
+    // TODO: This 'A' was Null but is causing issues with the library imports, work on changing this later
+    (*buffer)[i] = vga_entry('A', fore_color, back_color);
   }
   next_line_index = 1;
   vga_index = 0;
@@ -175,7 +176,7 @@ void print_string(char *str)
 void print_int(int num)
 {
   char str_num[digit_count(num)+1];
-  itoa(num, str_num);
+  itoa_personal(num, str_num);
   print_string(str_num);
 }
 
@@ -200,7 +201,7 @@ int read_int()
     sleep(CALC_SLEEP);
   }while(ch > 0);
 
-  return atoi(data);
+  return atoi_personal(data);
 }
 
 char* read_str()
@@ -209,9 +210,9 @@ char* read_str()
   char keycode = 0;
   // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
   // IMPORTANT TODO: This saves it in memory and needs to be derefernced and deleted or maybe can use malloc if can figure out imports
-  // char* str = malloc(25 * sizeof(char)); // Allocate memory for the array
+  char* str = malloc(25 * sizeof(char)); // Allocate memory for the array
 
-  char *str = "Broskey maybe this will work";
+  // char *str = "Broskey maybe this will work";
   // char str[25];
 
   // Check if there is an allocation failure? IDK, make sure to include with malloc
@@ -242,7 +243,7 @@ char* read_str()
   return str;
 }
 
-char getchar()
+char getchar_personal()
 {
   char keycode = 0;
   sleep(CALC_SLEEP);
@@ -345,7 +346,7 @@ void calculator()
         break;
     }
     print_string("\n\nPress any key to reload screen...");
-    getchar();
+    getchar_personal();
     clear_screen();
   }
 }

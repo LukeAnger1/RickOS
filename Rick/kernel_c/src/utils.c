@@ -20,7 +20,7 @@ uint32 digit_count(int num)
   return count;
 }
 
-void itoa(int num, char *number)
+void itoa_personal(int num, char *number)
 {
   int dgcount = digit_count(num);
   int index = dgcount - 1;
@@ -39,7 +39,7 @@ void itoa(int num, char *number)
   }
 }
 
-int atoi(char* s)
+int atoi_personal(char* s)
 {
   int len = strlen(s);
   int i = len - 1;
