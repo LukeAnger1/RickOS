@@ -1,6 +1,8 @@
 #include "kernel.h"
 #include "utils.h"
 #include "char.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 uint32 vga_index;
 uint16 cursor_pos = 0, cursor_next_line_index = 1;
@@ -201,17 +203,19 @@ int read_int()
   return atoi(data);
 }
 
-char* read_char()
+char* read_str()
 {
   char ch = 0;
   char keycode = 0;
   // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
-  // char data[32];
   // IMPORTANT TODO: This saves it in memory and needs to be derefernced and deleted or maybe can use malloc if can figure out imports
-  char data[32];// = malloc(25 * sizeof(char));
+  // char* str = malloc(25 * sizeof(char)); // Allocate memory for the array
+
+  char *str = "Broskey maybe this will work";
+  // char str[25];
 
   // Check if there is an allocation failure? IDK, make sure to include with malloc
-  // if (data == NULL) {
+  // if (str == NULL) {
   //   return NULL;
   // }
 
@@ -221,7 +225,7 @@ char* read_char()
     keycode = get_input_keycode();
     if (keycode == KEY_ENTER) {
       // Run the command
-      data[index] = '\0';
+      str[index] = '\0';
       print_new_line();
       break;      
     } else {
@@ -229,13 +233,13 @@ char* read_char()
       // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
       ch = get_ascii_char(keycode);
       print_char(ch);
-      data[index] = ch;
+      str[index] = ch;
       index++;
     }
     sleep(TERMINAL_SLEEP);
   } while(ch > 0);
 
-  return data;
+  return str;
 }
 
 char getchar()
@@ -283,7 +287,7 @@ void calculator()
     // TEST CODE: Remove later
     print_string("Type in a test str here: ");
     sleep(TERMINAL_SLEEP);
-    char *test = read_char();
+    char *test = read_str();
     print_string(test);
     // sleep(TERMINAL_SLEEP);
     // int test = read_int();

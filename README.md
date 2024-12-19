@@ -20,11 +20,11 @@ Tic-Tac-Toe a simple tic-tac-toe DOS game with boxes, Pong-Game using graphics
 7) mtools: utilities to access DOS disks in Unix<br/>
 8) grub-mkrescue :- utility to make ISO image<br/>
 9) QEMU :-  Quick EMUlator to boot our kernel<br/>
-10) VirtualBox :- A full graphical virtual environment
-
+10) VirtualBox :- A full graphical virtual environment<br/>
+11) Multilib :- Allows cross compiling for libraries like malloc
 
 ```
-sudo apt-get install make nasm gcc grub-pc-bin mtools xorriso qemu-system virtualbox
+sudo apt-get install make nasm gcc grub-pc-bin mtools xorriso qemu-system virtualbox gcc-multilib
 ```
 
 
