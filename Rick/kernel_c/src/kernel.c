@@ -1,8 +1,6 @@
 #include "kernel.h"
 #include "utils.h"
 #include "char.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 uint32 vga_index;
 uint16 cursor_pos = 0, cursor_next_line_index = 1;
@@ -12,8 +10,8 @@ uint8 g_fore_color = WHITE, g_back_color = BLACK;
 // if running on VirtualBox, VMware or on raw machine, 
 // change CALC_SLEEP following to greater than 4
 // for qemu it is better for 1
-#define CALC_SLEEP 1
-#define TERMINAL_SLEEP 1
+#define CALC_SLEEP 4
+#define TERMINAL_SLEEP 4
 
 /*
 this is same as we did in our assembly code for vga_print_char
@@ -51,8 +49,7 @@ void clear_vga_buffer(uint16 **buffer, uint8 fore_color, uint8 back_color)
 {
   uint32 i;
   for(i = 0; i < BUFSIZE; i++){
-    // TODO: This 'A' was Null but is causing issues with the library imports, work on changing this later
-    (*buffer)[i] = vga_entry('A', fore_color, back_color);
+    (*buffer)[i] = vga_entry(NULL, fore_color, back_color);
   }
   next_line_index = 1;
   vga_index = 0;
@@ -209,16 +206,9 @@ char* read_str()
   char ch = 0;
   char keycode = 0;
   // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
-  // IMPORTANT TODO: This saves it in memory and needs to be derefernced and deleted or maybe can use malloc if can figure out imports
-  char* str = malloc(25 * sizeof(char)); // Allocate memory for the array
-
-  // char *str = "Broskey maybe this will work";
-  // char str[25];
-
-  // Check if there is an allocation failure? IDK, make sure to include with malloc
-  // if (str == NULL) {
-  //   return NULL;
-  // }
+  // IMPORTANT TODO: I want to make a custom memory allocation function (otherwise need to be able to import something like malloc)
+  // char* str = malloc(25 * sizeof(char)); // Allocate memory for the array, change this with custom function or get import to work
+  char *str = "0123456789"; // buffer size of 10 for commands, will have to make this bigger
 
   int index = 0;
 
@@ -286,10 +276,10 @@ void calculator()
     print_string("\n\nEnter your choice : ");
     choice = read_int();
     // TEST CODE: Remove later
-    print_string("Type in a test str here: ");
-    sleep(TERMINAL_SLEEP);
-    char *test = read_str();
-    print_string(test);
+    // print_string("Type in a test str here: ");
+    // sleep(TERMINAL_SLEEP);
+    // char *test = read_str();
+    // print_string(test);
     // sleep(TERMINAL_SLEEP);
     // int test = read_int();
     // print_int(test);
@@ -353,6 +343,7 @@ void calculator()
 
 void kernel_entry()
 {
+  // NOTE: We can remove the init_vga to make it run faster
   init_vga(GREEN, BLACK);
   calculator();
 }
