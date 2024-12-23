@@ -10,8 +10,8 @@ uint8 g_fore_color = WHITE, g_back_color = BLACK;
 // if running on VirtualBox, VMware or on raw machine, 
 // change CALC_SLEEP following to greater than 4
 // for qemu it is better for 1
-#define CALC_SLEEP 4
-#define TERMINAL_SLEEP 4
+#define CALC_SLEEP 3
+#define TERMINAL_SLEEP 3
 
 /*
 this is same as we did in our assembly code for vga_print_char
@@ -208,7 +208,8 @@ char* read_str()
   // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
   // IMPORTANT TODO: I want to make a custom memory allocation function (otherwise need to be able to import something like malloc)
   // char* str = malloc(25 * sizeof(char)); // Allocate memory for the array, change this with custom function or get import to work
-  char *str = "0123456789"; // buffer size of 10 for commands, will have to make this bigger
+  // char *str = "0123456789"; // buffer size of 10 for commands, will have to make this bigger
+  char *str = (char *)0x000; // Example address in RAM
 
   int index = 0;
 
@@ -219,6 +220,12 @@ char* read_str()
       str[index] = '\0';
       print_new_line();
       break;      
+    } if (keycode == KEY_BACKSPACE) {
+      // Go back in address while making sure we dont go lees than zero
+      if (index -- < 0) {
+        index = 0;
+      }
+      // TODO: Have to undisplay characters somehow
     } else {
       // Add more to the string
       // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
@@ -271,7 +278,8 @@ void read_two_numbers(int* num1, int *num2)
 void terminal()
 {
   while (1) {
-    print_string("Type in a test str here: ");
+    // Change this to be a user name?
+    print_string("Rick: ");
     sleep(TERMINAL_SLEEP);
     char *test = read_str();
     print_string(test);
