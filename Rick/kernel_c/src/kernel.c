@@ -268,6 +268,16 @@ void read_two_numbers(int* num1, int *num2)
   *num2 = read_int();
 }
 
+void terminal()
+{
+  while (1) {
+    print_string("Type in a test str here: ");
+    sleep(TERMINAL_SLEEP);
+    char *test = read_str();
+    print_string(test);
+  }
+}
+
 void calculator()
 {
   int choice, num1, num2;
@@ -275,15 +285,6 @@ void calculator()
     display_menu();
     print_string("\n\nEnter your choice : ");
     choice = read_int();
-    // TEST CODE: Remove later
-    // print_string("Type in a test str here: ");
-    // sleep(TERMINAL_SLEEP);
-    // char *test = read_str();
-    // print_string(test);
-    // sleep(TERMINAL_SLEEP);
-    // int test = read_int();
-    // print_int(test);
-    // TEST CODE: Remove later
 
     switch(choice){
       case 1:
@@ -345,6 +346,7 @@ void kernel_entry()
 {
   // NOTE: We can remove the init_vga to make it run faster
   init_vga(GREEN, BLACK);
-  calculator();
+  // calculator();
+  terminal();
 }
 
