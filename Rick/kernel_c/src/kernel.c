@@ -209,7 +209,7 @@ int read_int()
   return atoi_personal(data);
 }
 
-char* read_str()
+void read_str()
 {
   char ch = 0;
   char keycode = 0;
@@ -247,7 +247,7 @@ char* read_str()
     sleep(TERMINAL_SLEEP);
   } while(ch > 0);
 
-  return str;
+  return;
 }
 
 char getchar_personal()
@@ -292,13 +292,28 @@ void terminal()
     // Get user input
     print_string("Rick: ");
     sleep(TERMINAL_SLEEP);
-    char *test = read_str();
+    // TODO: We can get rid of this return because it returns the same thing every time
+    read_str();
 
     // use user input
-    print_string(test);
+    print_string(TERMINAL_BUFFER_START);
     print_new_line();
 
   }
+}
+
+void run_terminal_command() {
+  // This should always be save in the start of the terminal buffer so we will assume the start is there when running the command
+
+  // ping to ping all morties
+
+  // upload code
+
+  // run code
+
+  // some way to check the "economy"
+
+
 }
 
 void calculator()
