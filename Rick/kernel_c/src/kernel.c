@@ -1,6 +1,7 @@
 #include "kernel.h"
 #include "utils.h"
 #include "char.h"
+#include "memory.h"
 
 uint32 vga_index;
 uint16 cursor_pos = 0, cursor_next_line_index = 1;
@@ -11,7 +12,7 @@ uint8 g_fore_color = WHITE, g_back_color = BLACK;
 // change CALC_SLEEP following to greater than 4
 // for qemu it is better for 1
 #define CALC_SLEEP 3
-#define TERMINAL_SLEEP 3
+#define TERMINAL_SLEEP 2
 
 /*
 this is same as we did in our assembly code for vga_print_char
@@ -183,6 +184,7 @@ void print_int(int num)
   print_string(str_num);
 }
 
+// TODO: Remove this outdated function at some point
 int read_int()
 {
   char ch = 0;
@@ -215,7 +217,7 @@ char* read_str()
   // IMPORTANT TODO: I want to make a custom memory allocation function (otherwise need to be able to import something like malloc)
   // char* str = malloc(25 * sizeof(char)); // Allocate memory for the array, change this with custom function or get import to work
   // char *str = "0123456789"; // buffer size of 10 for commands, will have to make this bigger
-  char *str = (char *)0x000; // Example address in RAM
+  char *str = TERMINAL_BUFFER_START; // Example address in RAM
 
   int index = 0;
 
@@ -237,11 +239,12 @@ char* read_str()
       }
     } else {
       // Add more to the string
-      // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
-      ch = get_ascii_char(keycode);
-      print_char(ch);
-      str[index] = ch;
-      index++;
+      // Make sure we dont do a buffer overflow
+      if (&str[index] < TERMINAL_BUFFER_END) {
+        ch = get_ascii_char(keycode);
+        print_char(ch);
+        str[++ index] = ch;
+      }
     }
     sleep(TERMINAL_SLEEP);
   } while(ch > 0);
