@@ -156,6 +156,12 @@ void print_char(char ch)
   move_cursor(++cursor_pos);
 }
 
+void delete_char()
+{
+  vga_buffer[--vga_index] = vga_entry(NULL, g_fore_color, g_back_color);
+  move_cursor(--cursor_pos);
+}
+
 void print_string(char *str)
 {
   uint32 index = 0;
@@ -222,10 +228,13 @@ char* read_str()
       break;      
     } if (keycode == KEY_BACKSPACE) {
       // Go back in address while making sure we dont go lees than zero
-      if (index -- < 0) {
-        index = 0;
+
+      // Check if index is bigger than zero
+      if (index > 0) {
+        // delete and move index
+        index --;
+        delete_char();
       }
-      // TODO: Have to undisplay characters somehow
     } else {
       // Add more to the string
       // IMPORTANT TODO: Fix this buffer overflow issue if we type too much into the terminal
