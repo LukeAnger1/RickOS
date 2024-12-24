@@ -213,10 +213,7 @@ char* read_str()
 {
   char ch = 0;
   char keycode = 0;
-  // IMPORTANT TODO: Change the terminal to be able to handle more input, perferably dynamic
-  // IMPORTANT TODO: I want to make a custom memory allocation function (otherwise need to be able to import something like malloc)
-  // char* str = malloc(25 * sizeof(char)); // Allocate memory for the array, change this with custom function or get import to work
-  // char *str = "0123456789"; // buffer size of 10 for commands, will have to make this bigger
+
   char *str = TERMINAL_BUFFER_START; // Example address in RAM
 
   int index = 0;
@@ -225,6 +222,7 @@ char* read_str()
     keycode = get_input_keycode();
     if (keycode == KEY_ENTER) {
       // Run the command
+      // IMPORTANT NOTE: This does not check to make sure it is within range, keep this in mind
       str[index] = '\0';
       print_new_line();
       break;      
@@ -243,7 +241,7 @@ char* read_str()
       if (&str[index] < TERMINAL_BUFFER_END) {
         ch = get_ascii_char(keycode);
         print_char(ch);
-        str[++ index] = ch;
+        str[index++] = ch;
       }
     }
     sleep(TERMINAL_SLEEP);
@@ -290,11 +288,16 @@ void read_two_numbers(int* num1, int *num2)
 void terminal()
 {
   while (1) {
-    // Change this to be a user name?
+    // TODO: Change this to be a user name?
+    // Get user input
     print_string("Rick: ");
     sleep(TERMINAL_SLEEP);
     char *test = read_str();
+
+    // use user input
     print_string(test);
+    print_new_line();
+
   }
 }
 
