@@ -3,12 +3,12 @@
 # assemble boot.s file
 as --32 boot.s -o boot.o
 
-# compile kernel.c file
-g++ -m32 -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+# compile kernel.cpp file
+g++ -m32 -c kernel.cpp -o kernel.o -std=c++17 -ffreestanding -O1 -Wall -Wextra
 
-g++ -m32 -c utils.c -o utils.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+g++ -m32 -c utils.cpp -o utils.o -std=c++17 -ffreestanding -O1 -Wall -Wextra
 
-g++ -m32 -c char.c -o char.o -std=gnu99 -ffreestanding -O1 -Wall -Wextra
+g++ -m32 -c char.cpp -o char.o -std=c++17 -ffreestanding -O1 -Wall -Wextra
 
 # linking all the object files to RICK.bin
 ld -m elf_i386 -T linker.ld kernel.o utils.o char.o boot.o -o RICK.bin -nostdlib

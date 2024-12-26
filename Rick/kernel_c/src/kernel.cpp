@@ -1,7 +1,7 @@
-#include "kernel.h"
-#include "utils.h"
-#include "char.h"
-#include "memory.h"
+#include "kernel.hpp"
+#include "utils.hpp"
+#include "char.hpp"
+#include "memory.hpp"
 
 uint32 vga_index;
 uint16 cursor_pos = 0, cursor_next_line_index = 1;
@@ -163,7 +163,7 @@ void delete_char()
   move_cursor(--cursor_pos);
 }
 
-void print_string(char *str)
+void print_string(const char *str)
 {
   uint32 index = 0;
   while(str[index]){
@@ -380,7 +380,7 @@ void calculator()
   }
 }
 
-void kernel_entry()
+extern "C" void kernel_entry()
 {
   // NOTE: We can remove the init_vga to make it run faster
   init_vga(GREEN, BLACK);

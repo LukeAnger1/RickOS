@@ -1,7 +1,7 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#include "types.h"
+#include "types.hpp"
 
 #define NULL 0
 
@@ -30,7 +30,7 @@ enum vga_color {
 };
 
 
-#include "keyboard.h"
+#include "keyboard.hpp"
 
 
 #endif
