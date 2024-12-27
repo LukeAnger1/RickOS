@@ -8,6 +8,7 @@ constexpr unsigned int binaryWithZeros(unsigned int numZeros) {
 
 constexpr unsigned int blockSizeNumZeros = 8;
 constexpr unsigned int blockSize = binaryWithZeros(blockSizeNumZeros);
+constexpr unsigned int BLOCK_INDEX_MASK = blockSize - 1;
 
 // Memory Layout
 
