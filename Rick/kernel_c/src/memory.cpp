@@ -82,7 +82,7 @@ Memory* createMemory(int size) {
   Block* prevBlock = createBlock(NULL);
   Memory* newMemory = new Memory{size, prevBlock};
 
-  int numBlocks = size >> blockSizeNumZeros;
+  int numBlocks = (size >> blockSizeNumZeros) + 1;
 
   while(0 < --numBlocks) {
     // Make the new block
@@ -142,9 +142,9 @@ int getMemory(Memory* memory, int index) {
 
 void testCreateMemory() {
     // Test creating memory
-    // int size = 16; // Total memory size
+    int size = 16; // Total memory size
     // int size = 255; // This works
-    int size = 256; // This fails
+    // int size = 256;
     Memory* memory = createMemory(size);
 
     // Verify the memory object is created correctly
@@ -166,6 +166,9 @@ void testCreateMemory() {
         // Traverse to the next block
         currentBlock = currentBlock->nextBlock;
     }
+
+    // This is a test case
+    // std::cout << "the block count is " << blockCount << " while the num blocks is " << numBlocks << endl;
 
     // Ensure the correct number of blocks were created
     assert(blockCount == numBlocks);
