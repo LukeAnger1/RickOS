@@ -129,11 +129,34 @@ Block* getBlockInMemory(Memory* memory, int blockIndex) {
 }
 
 void setMemory(Memory* memory, int index, int value) {
+  // Make sure the index is valid
+  if (index >= memory->size) throw "Index is ouside of range";
+  if (index < 0) throw "Index is negative";
+
+  // Seperate the index into a block index and a offset index
+  int blockIndex = index >> blockSizeNumZeros;
+  int blockOffsetIndex = index & BLOCK_INDEX_MASK;
+
+  // Get the block where were the index is located
+  Block* block = getBlockInMemory(memory, blockIndex);
+
+  ((int *)(block->data))[blockOffsetIndex] = value;
 
 }
 
 int getMemory(Memory* memory, int index) {
-  return 0;
+  // Make sure the index is valid
+  if (index >= memory->size) throw "Index is ouside of range";
+  if (index < 0) throw "Index is negative";
+
+  // Seperate the index into a block index and a offset index
+  int blockIndex = index >> blockSizeNumZeros;
+  int blockOffsetIndex = index & BLOCK_INDEX_MASK;
+
+  // Get the block where were the index is located
+  Block* block = getBlockInMemory(memory, blockIndex);
+
+  return ((int *)(block->data))[blockOffsetIndex];
 }
 
 
@@ -158,7 +181,59 @@ int getMemory(Memory* memory, int index) {
 
 
 
+// Test Cases
+void testSetMemoryAndGetMemory() {
+    int size = 16; // Total memory size
+    Memory* memory = createMemory(size);
 
+    // Test valid indices
+    setMemory(memory, 0, 10);
+    assert(getMemory(memory, 0) == 10);
+
+    setMemory(memory, 5, 20);
+    assert(getMemory(memory, 5) == 20);
+
+    setMemory(memory, 15, 30);
+    assert(getMemory(memory, 15) == 30);
+
+    // Test overwriting a value
+    setMemory(memory, 5, 25);
+    assert(getMemory(memory, 5) == 25);
+
+    // Test invalid indices (out of bounds)
+    try {
+        setMemory(memory, -1, 40); // Negative index
+        assert(false); // Should not reach here
+    } catch (const char* e) {
+        assert(std::string(e) == "Index is negative");
+    }
+
+    try {
+        setMemory(memory, 16, 50); // Index out of range
+        assert(false); // Should not reach here
+    } catch (const char* e) {
+        assert(std::string(e) == "Index is ouside of range");
+    }
+
+    try {
+        getMemory(memory, -1); // Negative index
+        assert(false); // Should not reach here
+    } catch (const char* e) {
+        assert(std::string(e) == "Index is negative");
+    }
+
+    try {
+        getMemory(memory, 16); // Index out of range
+        assert(false); // Should not reach here
+    } catch (const char* e) {
+        assert(std::string(e) == "Index is ouside of range");
+    }
+
+    std::cout << "testSetMemoryAndGetMemory passed.\n";
+
+    // Clean up
+    deleteMemory(memory);
+}
 
 // Test cases
 void testGetBlockInMemory() {
@@ -334,7 +409,9 @@ int main() {
 
   // testDeleteMemory();
 
-  testGetBlockInMemory();
+  // testGetBlockInMemory();
+
+  testSetMemoryAndGetMemory();
 
   return 0;
 }
