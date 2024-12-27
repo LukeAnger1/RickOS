@@ -2,6 +2,8 @@
 char *TERMINAL_BUFFER_START = (char *)0x000;
 char *TERMINAL_BUFFER_END = (char *)0x010; // This allows 16 characters with the last one potetnially being end character
 
+const static int blockSize = 500;
+
 // Memory Layout
 
 // Section for terminal buffer
