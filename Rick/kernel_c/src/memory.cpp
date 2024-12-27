@@ -106,6 +106,28 @@ void deleteMemory(Memory* memory) {
   delete memory;
 }
 
+Block* getBlockInMemory(Memory* memory, int blockIndex) {
+  // Check to make sure the index is not negative
+  if (blockIndex < 0) return NULL;
+
+  // Check if the block exists
+  int numBlocks = ((memory->size) >> blockSizeNumZeros) + 1;
+  if (numBlocks <= blockIndex) return NULL;
+
+  Block* currentBlock  = memory->firstBlock;
+
+  for (int index = 0; index < blockIndex; index++) {
+
+    // If the current block is null then just return null
+    if (!currentBlock) return NULL;
+
+    currentBlock = currentBlock->nextBlock;
+  }
+
+  // Return the block at that index or NULL if there isnt one
+  return currentBlock;
+}
+
 void setMemory(Memory* memory, int index, int value) {
 
 }
@@ -138,7 +160,39 @@ int getMemory(Memory* memory, int index) {
 
 
 
+// Test cases
+void testGetBlockInMemory() {
+    int size = 1000; // Total memory size
+    Memory* memory = createMemory(size);
 
+    // Test valid indices
+    Block* firstBlock = getBlockInMemory(memory, 0);
+    assert(firstBlock == memory->firstBlock); // First block should match
+
+    Block* secondBlock = getBlockInMemory(memory, 1);
+    assert(secondBlock == memory->firstBlock->nextBlock); // Second block should match
+
+    Block* thirdBlock = getBlockInMemory(memory, 2);
+    assert(thirdBlock == memory->firstBlock->nextBlock->nextBlock); // Third block should match
+
+    // Test invalid indices
+    Block* outOfBoundsBlock = getBlockInMemory(memory, 10); // Exceeds number of blocks
+    assert(outOfBoundsBlock == nullptr);
+
+    Block* negativeIndexBlock = getBlockInMemory(memory, -1); // Negative index (invalid)
+    assert(negativeIndexBlock == nullptr);
+
+    // Test edge case: last block
+    int numBlocks = (size >> blockSizeNumZeros) + 1;
+    Block* lastBlock = getBlockInMemory(memory, numBlocks - 1);
+    assert(lastBlock != nullptr);
+    assert(lastBlock->nextBlock == nullptr); // Last block should have no next block
+
+    std::cout << "testGetBlockInMemory passed.\n";
+
+    // Clean up
+    deleteMemory(memory);
+}
 
 void testCreateMemory() {
     // Test creating memory
@@ -276,9 +330,11 @@ int main() {
 
   // testDeleteAllBlocks();
 
-  testCreateMemory();
+  // testCreateMemory();
 
-  testDeleteMemory();
+  // testDeleteMemory();
+
+  testGetBlockInMemory();
 
   return 0;
 }
