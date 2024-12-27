@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "memory.hpp"
 
 using namespace std;
@@ -8,6 +9,12 @@ struct Block
   struct Block* prevBlock;
   void* data;
   struct Block* nextBlock;
+};
+
+struct Memory
+{
+  int size;
+  struct Block* firstBlock;
 };
 
 Block* createBlock(Block* prev) {
@@ -70,6 +77,117 @@ void deleteAllBlocks(Block* current) {
   delete current;
 }
 
+Memory* createMemory(int size) {
+  // This function will generate blocks to use for an array based off of the size
+  Block* prevBlock = createBlock(NULL);
+  Memory* newMemory = new Memory{size, prevBlock};
+
+  int numBlocks = size >> blockSizeNumZeros;
+
+  while(0 < --numBlocks) {
+    // Make the new block
+    Block* newBlock = createBlock(prevBlock);
+
+    // Set the prev one
+    prevBlock->nextBlock = newBlock;
+
+    // Get ready for the next iteration
+    prevBlock = newBlock;
+  }
+
+  return newMemory;
+}
+
+void deleteMemory(Memory* memory) {
+  // delete the blocks
+  deleteAllBlocks(memory->firstBlock);
+
+  // delete the memory
+  delete memory;
+}
+
+void setMemory(Memory* memory, int index, int value) {
+
+}
+
+int getMemory(Memory* memory, int index) {
+  return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void testCreateMemory() {
+    // Test creating memory
+    // int size = 16; // Total memory size
+    // int size = 255; // This works
+    int size = 256; // This fails
+    Memory* memory = createMemory(size);
+
+    // Verify the memory object is created correctly
+    assert(memory != nullptr);
+    assert(memory->size == size);
+    assert(memory->firstBlock != nullptr);
+
+    // Verify the blocks are linked correctly
+    Block* currentBlock = memory->firstBlock;
+    int numBlocks = (size >> blockSizeNumZeros) + 1; // Calculate expected number of blocks
+    int blockCount = 0;
+
+    while (currentBlock) {
+        ++blockCount;
+
+        // Ensure each block's data is allocated
+        assert(currentBlock->data != nullptr);
+
+        // Traverse to the next block
+        currentBlock = currentBlock->nextBlock;
+    }
+
+    // Ensure the correct number of blocks were created
+    assert(blockCount == numBlocks);
+
+    std::cout << "testCreateMemory passed.\n";
+
+    // Clean up
+    deleteMemory(memory);
+}
+
+void testDeleteMemory() {
+    // Test deleting memory
+    int size = 16; // Total memory size
+    Memory* memory = createMemory(size);
+
+    // Delete the memory and ensure no crashes or leaks
+    deleteMemory(memory);
+
+    std::cout << "testDeleteMemory passed.\n";
+}
+
+/// The code below is for testing
 void testDeleteBlock() {
 
   Block* test = createBlock(NULL);
@@ -153,7 +271,11 @@ void testDeleteAllBlocks() {
 int main() {
   // testDeleteBlock();
 
-  testDeleteAllBlocks();
+  // testDeleteAllBlocks();
+
+  testCreateMemory();
+
+  testDeleteMemory();
 
   return 0;
 }
