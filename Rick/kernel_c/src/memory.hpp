@@ -10,6 +10,9 @@ constexpr unsigned int blockSizeNumZeros = 8;
 constexpr unsigned int blockSize = binaryWithZeros(blockSizeNumZeros);
 constexpr unsigned int BLOCK_INDEX_MASK = blockSize - 1;
 
+constexpr unsigned int NUM_BLOCKS = 256;
+constexpr unsigned int TOTAL_MEMORY_SIZE = blockSize * NUM_BLOCKS;
+
 // Memory Layout
 
 // Section for terminal buffer
