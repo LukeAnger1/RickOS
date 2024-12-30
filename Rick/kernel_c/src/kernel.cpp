@@ -214,7 +214,7 @@ void read_str()
   char ch = 0;
   char keycode = 0;
 
-  char *str = TERMINAL_BUFFER_START; // Example address in RAM
+  char *str = (char *)TERMINAL_BUFFER_START; // Example address in RAM
 
   int index = 0;
 
@@ -238,7 +238,7 @@ void read_str()
     } else {
       // Add more to the string
       // Make sure we dont do a buffer overflow
-      if (&str[index] < TERMINAL_BUFFER_END) {
+      if (&str[index] < (char *)TERMINAL_BUFFER_END) {
         ch = get_ascii_char(keycode);
         print_char(ch);
         str[index++] = ch;
@@ -296,7 +296,7 @@ void terminal()
     read_str();
 
     // use user input
-    print_string(TERMINAL_BUFFER_START);
+    print_string((char *)TERMINAL_BUFFER_START);
     print_new_line();
 
   }

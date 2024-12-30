@@ -1,6 +1,6 @@
 // The first is inclusive the second is inclusive 
-char *TERMINAL_BUFFER_START = (char *)0x000;
-char *TERMINAL_BUFFER_END = (char *)0x010; // This allows 16 characters with the last one potetnially being end character
+const int TERMINAL_BUFFER_START = 0x000;
+const int TERMINAL_BUFFER_END = 0x010; // This allows 16 characters with the last one potetnially being end character
 
 constexpr unsigned int binaryWithZeros(unsigned int numZeros) {
     return (1u << numZeros);
@@ -12,6 +12,9 @@ constexpr unsigned int BLOCK_INDEX_MASK = blockSize - 1;
 
 constexpr unsigned int NUM_BLOCKS = 256;
 constexpr unsigned int TOTAL_MEMORY_SIZE = blockSize * NUM_BLOCKS;
+
+// constexpr char *MEMORY_BUFFER_START = TERMINAL_BUFFER_END + 1;
+
 
 // Memory Layout
 
