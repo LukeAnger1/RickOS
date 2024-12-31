@@ -2,6 +2,7 @@
 #include "utils.hpp"
 #include "char.hpp"
 #include "memory.hpp"
+#include "constants.hpp"
 
 uint32 vga_index;
 uint16 cursor_pos = 0, cursor_next_line_index = 1;
