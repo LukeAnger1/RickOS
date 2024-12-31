@@ -1,159 +1,53 @@
 #include "memory.hpp"
-#include "kernel.hpp"
+#include "constants.hpp"
+#include <iostream>
 
 using namespace std;
 
-struct Block
-{
-  struct Block* prevBlock;
-  void* data;
-  struct Block* nextBlock;
-};
+// Redesigning malloc to hopefully be more efficient
+// Linked List of free memory
+// Each block has to be at least 16 bytes (big_boy * 2) to allow linked list on all blocks
 
-struct Memory
-{
-  int size;
-  struct Block* firstBlock;
-};
+// 1. Set size memory allocation
 
-Block* createBlock(Block* prev) {
-  Block* b1 = new Block {prev, new int[blockSize], NULL};
+// 2. Greedy memory allocation
 
-  return b1;
-}
+  // Like First Search but offset the search based off of block request size
 
-void deleteBlock(Block* current) {
-  // check if null and do nothing if so
-  if (!current) return;
+  // Have the smaller values first so that it can go into the larger blocks
 
-  delete (int *)(current->data);
+  // We immediately know if a block is too big to satisfy request
 
-  // Fix the previous and next block after deleting the current one
-  if (current->prevBlock) {
-    (current->prevBlock)->nextBlock = current->nextBlock;
-  }
-  if (current->nextBlock){
-    (current->nextBlock)->prevBlock = current->prevBlock;
-  }
+    // Return NULL pointer
 
-  // Delete the current block address
-  delete current;
+  // Keep a key-value address list to translate block size into index at the begining of memory
 
-}
+    // On release
 
-void deleteAllBlocks(Block* current) {
-  // Do nothing if null
-  if (!current) return;
+      // When memory is freed somehow recombine?
 
-  // Delete the other blocks
-  Block* otherBlock = current->nextBlock;
-  while(otherBlock) {
-    // delete the data
-    delete (int *)(otherBlock->data);
-    
-    // delete the block we are looking at
-    Block* otherOtherBlock = otherBlock->nextBlock;
-    delete otherBlock;
+        // We should organize prev block, data, next block
 
-    otherBlock = otherOtherBlock;
-  }
+          // This allows us to go back one address to get next block address
 
-  // Delete the prev blocks
-  otherBlock = current->prevBlock;
-  while(otherBlock) {
-    // delete the data
-    delete (int *)(otherBlock->data);
-    
-    // delete the block we are looking at
-    Block* otherOtherBlock = otherBlock->prevBlock;
-    delete otherBlock;
+          // This also allows us to go forward one address to get prev block address
 
-    otherBlock = otherOtherBlock;
-  }
+            // We can do both of these recursively to rejoin memory blocks
 
-  // Delete this block
-  delete (int *)(current->data);
-  delete current;
-}
+            // Con: We need a quick way to see if an address is in the linked list
 
-Memory* createMemory(int size) {
-  // This function will generate blocks to use for an array based off of the size
-  Block* prevBlock = createBlock(NULL);
-  Memory* newMemory = new Memory{size, prevBlock};
+              // O(n) search to check currently'
 
-  int numBlocks = (size >> blockSizeNumZeros) + 1;
+            // Con: We also need to store the length of the data (prob better to instead contain how far to go to get the corresponding length on the other side) at the begining and the end (so that from either end we can find the other one)
 
-  while(0 < --numBlocks) {
-    // Make the new block
-    Block* newBlock = createBlock(prevBlock);
+              // By using the corresponding lengths we can quickly eliminate possible blocks
 
-    // Set the prev one
-    prevBlock->nextBlock = newBlock;
+              // Con: We may have to repeat this but vary low odds of this happening
 
-    // Get ready for the next iteration
-    prevBlock = newBlock;
-  }
+      // Also update the pointers to reflect the ney memory in the linked list
 
-  return newMemory;
-}
+    // On hit
 
-void deleteMemory(Memory* memory) {
-  // delete the blocks
-  deleteAllBlocks(memory->firstBlock);
+      // After claiming memory modify the start search address
 
-  // delete the memory
-  delete memory;
-}
-
-Block* getBlockInMemory(Memory* memory, int blockIndex) {
-  // Check to make sure the index is not negative
-  if (blockIndex < 0) return NULL;
-
-  // Check if the block exists
-  int numBlocks = ((memory->size) >> blockSizeNumZeros) + 1;
-  if (numBlocks <= blockIndex) return NULL;
-
-  Block* currentBlock  = memory->firstBlock;
-
-  for (int index = 0; index < blockIndex; index++) {
-
-    // If the current block is null then just return null
-    if (!currentBlock) return NULL;
-
-    currentBlock = currentBlock->nextBlock;
-  }
-
-  // Return the block at that index or NULL if there isnt one
-  return currentBlock;
-}
-
-void setMemory(Memory* memory, int index, int value) {
-  // Make sure the index is valid
-  if (index >= memory->size) throw "Index is ouside of range";
-  if (index < 0) throw "Index is negative";
-
-  // Seperate the index into a block index and a offset index
-  int blockIndex = index >> blockSizeNumZeros;
-  int blockOffsetIndex = index & BLOCK_INDEX_MASK;
-
-  // Get the block where were the index is located
-  Block* block = getBlockInMemory(memory, blockIndex);
-
-  ((int *)(block->data))[blockOffsetIndex] = value;
-
-}
-
-int getMemory(Memory* memory, int index) {
-  // Make sure the index is valid
-  if (index >= memory->size) throw "Index is ouside of range";
-  if (index < 0) throw "Index is negative";
-
-  // Seperate the index into a block index and a offset index
-  int blockIndex = index >> blockSizeNumZeros;
-  int blockOffsetIndex = index & BLOCK_INDEX_MASK;
-
-  // Get the block where were the index is located
-  Block* block = getBlockInMemory(memory, blockIndex);
-
-  return ((int *)(block->data))[blockOffsetIndex];
-}
+      // When memory is broken up move it to be based off the index
