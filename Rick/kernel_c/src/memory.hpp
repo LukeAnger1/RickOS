@@ -3,7 +3,7 @@
 // TODO: Makes sure we are not wasting memory when going from int to char
 // The first is inclusive the second is inclusive 
 const big_boy TERMINAL_BUFFER_START = 0x000;
-const big_boy TERMINAL_BUFFER_END = 0x010; // This allows 16 characters with the last one potetnially being end character
+const big_boy TERMINAL_BUFFER_END = 0x009; // This allows 15 characters with the last one potetnially being end character
 
 constexpr unsigned int binaryWithZeros(unsigned int numZeros) {
     return (1u << numZeros);
